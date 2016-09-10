@@ -1,0 +1,41 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-image: url('../img/landingheader.jpg');
+	background-size: cover;
+}
+
+.text-container {
+	text-align: center;
+	width: 80%;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	margin-top: 200px;
+}
+
+#search-bar {
+	border: none;
+	border-bottom: 1px solid lightgrey;
+	width: 34%;
+	height: 48px;
+	background-color: rgba(255,255,255,0);
+	align-self: center;
+
+}
+
+#search-bar:focus {
+	border-bottom-color: #0BAEA9;
+	outline-width: 0;
+}
+
+.search {
+	border: 2px solid white;
+	border-radius: 6px;
+	padding: 10px 20px 10px 20px;
+	color: 
+}
+
