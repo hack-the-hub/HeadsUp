@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html style="height:100%;width: 100%">
   <head>
 
   </head>
-  <body>
-    <div style="height:500px" id="map"></div>
+  <body style="height:100%;width: 100%">
+    <div style="height:100%;width: 100%" id="map"></div>
     <script>
     
 
@@ -19,6 +19,10 @@
                    {lat:54.599171338442254, lng: -5.930388220901477},
                    //{lat:54.59729743085238, lng: -5.9299590674590945}
                   ]
+                  
+    var coords2 = [
+                    ]
+    
     
       function initMap() {
           
@@ -63,16 +67,7 @@
             size: new google.maps.Size(20, 32),
         });
         
-        function incrementLat2(l){
-            var lat = l;
-            var latlng = new google.maps.LatLng(54.59728500000001, l);
-            marker.setPosition(latlng);
-            
-            setTimeout(function(){
-                incrementLat(l - 0.00001)
-            }, 100);
-        }
-        
+
         function move(){
             var currentLng = currentLocation.lng;
             var currentLat = currentLocation.lat;
@@ -115,6 +110,7 @@
             
             //create new location obj
             var latlng = new google.maps.LatLng(currentLat, currentLng)
+            map.setCenter(latlng)
             
             currentLocation = {lat: currentLat, lng: currentLng};
             //console.log(currentLocation)
@@ -124,7 +120,7 @@
             setTimeout(function(){
                 move()
                 //console.log("moving")
-            }, 5);
+            }, 2);
         }
         
         
