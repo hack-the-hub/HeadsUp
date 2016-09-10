@@ -1,0 +1,14 @@
+{
+  "name": "demo1",
+  "description": "First Express app",
+  "version": "0.0.1",
+  "dependencies": {
+    "body-parser": "~1.0.1",
+    "express": "~4.0.0",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.5",
+    "hbs": "^4.0.0",
+    "jade": "^1.11.0",
+    "mongoose": "^4.6.0"
+  }
+}

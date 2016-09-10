@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+  </head>
+  <body>
+    <div style="height:500px" id="map"></div>
+    <script>
+    
+
+    var busIcon = "./WHITECUT.png"
+    var currentLocation = {lat: 54.59728500000001, lng: -5.930119999999988};
+    var destination;
+    var marker;
+    
+    var coords =  [{lat:54.59729743085238, lng: -5.9299590674590945},
+                   {lat:54.59719176848636, lng: -5.9333064643096805},
+                   {lat:54.599205521693555, lng: -5.933027514572132},
+                   {lat:54.599171338442254, lng: -5.930388220901477},
+                   //{lat:54.59729743085238, lng: -5.9299590674590945}
+                  ]
+    
+      function initMap() {
+          
+        var icon = {
+            url: "./WHITECUT.png", // url
+            scaledSize: new google.maps.Size(305 / 10, 282 / 10), // scaled size
+            origin: new google.maps.Point(0,0), // origin
+            anchor: new google.maps.Point(15, 15) // anchor
+        };
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 54.59728500000001, lng: -5.930119999999988},
+          scrollwheel: false,
+          zoom: 16
+        });
+        
+
+        
+        var busRoute = new google.maps.Polyline({
+          path: coords,
+          geodesic: true,
+          strokeColor: '#7580ba',
+          strokeOpacity: 0.8,
+          strokeWeight: 2.5
+        });
+
+        busRoute.setMap(map);
+        
+        for (var i = 0; i < coords.length; i++){
+           var stop1 = new google.maps.Marker({
+                position: coords[i],
+                map: map,
+                label: 'Stop'
+            });
+        }
+        
+        marker = new google.maps.Marker({
+            position: currentLocation,
+            map: map,
+            title: 'Hello World!',
+            icon: icon,
+            size: new google.maps.Size(20, 32),
+        });
+        
+        function incrementLat2(l){
+            var lat = l;
+            var latlng = new google.maps.LatLng(54.59728500000001, l);
+            marker.setPosition(latlng);
+            
+            setTimeout(function(){
+                incrementLat(l - 0.00001)
+            }, 100);
+        }
+        
+        function move(){
+            var currentLng = currentLocation.lng;
+            var currentLat = currentLocation.lat;
+            console.log(currentLat);
+            
+            var targetLng = destination.lng;
+            var targetLat = destination.lat;
+            console.log(targetLat)
+            
+            var newLng;
+            var newLat;
+            
+            //increments longitude
+            if (targetLng > currentLng) {
+                currentLng += 0.00001;
+                if (targetLng - currentLng < 0.0001){
+                    currentLng = targetLng;
+                }
+            }
+            else if (targetLng < currentLng){
+                currentLng -= 0.00001;
+                if (currentLng - targetLng < 0.0001){
+                    currentLng = targetLng;
+                }
+            }
+            
+            //increments latitude
+            if (targetLat > currentLat) {
+                currentLat += 0.00001;
+                if (targetLat - currentLat < 0.0001){
+                    currentLat = targetLat;
+                }
+            }
+            else if (targetLat < currentLat){
+                currentLat -= 0.00001;
+                if (currentLat - targetLat < 0.0001){
+                    currentLat = targetLat;
+                }
+            }
+            
+            //create new location obj
+            var latlng = new google.maps.LatLng(currentLat, currentLng)
+            
+            currentLocation = {lat: currentLat, lng: currentLng};
+            //console.log(currentLocation)
+            
+            marker.setPosition(latlng);
+            
+            setTimeout(function(){
+                move()
+                //console.log("moving")
+            }, 5);
+        }
+        
+        
+        move();
+        
+        
+      }
+      
+        var counter = coords.length - 1;
+        
+        function changeDestination() {
+            counter ++;
+            if (counter >= coords.length) {
+                counter = 0
+            }
+            console.log("changing destination to" + counter)
+            console.log(coords[counter])
+            destination = coords[counter]
+            
+            setTimeout(function(){
+                changeDestination();
+            }, 10000);
+        }
+        
+        changeDestination(0);
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD71DqOeoafSoHg8CTSJXpIxL-1pWh57yA&callback=initMap"
+    async defer></script>
+  </body>
+</html>
