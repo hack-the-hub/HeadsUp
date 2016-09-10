@@ -13,7 +13,7 @@ journeys.init();
 routes.init();
 stops.init();
 
-app.use(express.static(path.join(__dirname, '../')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
@@ -79,3 +79,4 @@ app.use('/api', router);
 
 app.listen(1337);
 console.log("Translink bus tracking working on port 1337");
+journeys.simulateJourney();
