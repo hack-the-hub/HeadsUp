@@ -7,11 +7,13 @@ var methodOverride = require('method-override');
 var path = require('path');
 
 var routes = require('./routes');
-routes.init();
 var journeys = require('./journeys');
+var stops = require('./stops');
 journeys.init();
+routes.init();
+stops.init();
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../')));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
@@ -25,6 +27,24 @@ router.use(function(req, res, next) {
     next();
 });
 
+router.route('/routes')
+  .get(function(req, res) {
+    res.json(routes.collection);
+});
+
+router.route('/stops')
+  .get(function(req, res) {
+    res.json(stops.collection);
+});
+
+router.route('/stops/:stopName')
+  .get(function(req, res) {
+    var stop = stops.collection.filter(function(obj) {
+      return obj.stopName == req.params.stopName;
+    });
+    res.json(stop);
+});
+
 router.route('/journeys')
   .get(function(req, res) {
     res.json(journeys.collection);
@@ -34,26 +54,17 @@ router.route('/journeys')
       id: journeys.collection.length,
       routeId: req.body.routeId,
       long: req.body.long,
-      lat: req.body.lat
+      latt: req.body.latt
     };
     journeys.collection.push(journey);
     res.json(journey);
 })
 .put(function(req, res) {
-  var journey = {
-    id: journeys.collection.length,
-    routeId: req.body.routeId,
-    long: req.body.long,
-    lat: req.body.lat
-  };
-  journeys.collection[req.body.id]
-  res.json(journey);
-})
-
-router.route('/routes')
-  .get(function(req, res) {
-    console.log("test");
-    res.json(routes.collection);
+  var id = req.body.id;
+  console.log(id);
+  journeys.collection[id].long = req.body.long;
+  journeys.collection[id].latt = req.body.latt;
+  res.json("okay");
 });
 
 router.route('/journeys/getByRoute/:routeId')
