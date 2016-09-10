@@ -27,6 +27,18 @@ app.get('/', function (req, res, next) {
     });
 });
 
+app.get('/test', function (req, res, next) {
+    res.render('index', {
+        showTitle: true,
+
+        // Override `foo` helper only for this rendering.
+        helpers: {
+            foo: function () { return 'foo.'; }
+        },
+        test : "hello, world"
+    });
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(8080);

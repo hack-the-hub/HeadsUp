@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html style="height:100%;width:100%;oveflow:hidden;" class="full" lang="en">
+<!-- Make sure the <html> tag is set to the .full CSS class. Change the background image in the full.css file. -->
+
+<head >
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Headsup Bus Tracker</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/full.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+</head>
+
+<body style="height:100%;width:100%;overflow:hidden;">
+
+    <!-- Navigation -->
+    <nav class="thing1 navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container" style="width:100% !important">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header" style="width:100% !important; text-align:center; padding-top:5px">
+                  <img id="logobus" src="Slice 1.png"/>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Put your page content here! -->
+<div class="thing2 btn-group">
+  <button id="dropdownmain" class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    SELECT A ROUTE  <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" style="margin:0px">
+    <li><a href="#">123A</a></li>
+    <li> <a href="#">14B</a></li>
+    <li> <a href="#">16A</a></li>
+  </ul>
+</div
+
+
+
+
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+
+<div style="width: 100%; overflow:hidden; padding:0px; margin: 0px" id="map"></div>
+    <script>
+    
+    var contentHeight = $(".thing1").height() + $(".thing2").height();
+    console.log(parseInt($(window).height()) - parseInt(contentHeight));
+    $("#map").css("height", parseInt($(window).height()) - parseInt(contentHeight) + "px");
+    
+
+    var busIcon = "./WHITECUT.png"
+    var currentLocation = {lat: 54.59728500000001, lng: -5.930119999999988};
+    var destination;
+    var marker;
+    
+    var coords =  [{lat:54.59729743085238, lng: -5.9299590674590945},
+                   {lat:54.59719176848636, lng: -5.9333064643096805},
+                   {lat:54.599205521693555, lng: -5.933027514572132},
+                   {lat:54.599171338442254, lng: -5.930388220901477},
+                   //{lat:54.59729743085238, lng: -5.9299590674590945}
+                  ]
+                  
+    var coords2 = [{lat:54.59697111972035, lng: -5.933290371055591},
+                   {lat:54.59734404651495, lng: -5.933309146518695},
+                   {lat:54.598576234514006, lng: -5.933344015235889},
+                   {lat:54.59919775277535, lng: -5.933022150154102},
+                   {lat:54.59916823087255, lng: -5.933022150154102},
+                   
+                    ]
+                    
+    
+    
+    
+      function initMap() {
+          
+        var icon = {
+            url: "./WHITECUT.png", // url
+            scaledSize: new google.maps.Size(305 / 10, 282 / 10), // scaled size
+            origin: new google.maps.Point(0,0), // origin
+            anchor: new google.maps.Point(15, 15) // anchor
+        };
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 54.59728500000001, lng: -5.930119999999988},
+          scrollwheel: false,
+          zoom: 16
+        });
+        
+
+        
+        var busRoute = new google.maps.Polyline({
+          path: coords,
+          geodesic: true,
+          strokeColor: '#7580ba',
+          strokeOpacity: 0.8,
+          strokeWeight: 2.5
+        });
+
+        busRoute.setMap(map);
+        
+        for (var i = 0; i < coords.length; i++){
+           var stop1 = new google.maps.Marker({
+                position: coords[i],
+                map: map,
+                label: 'Stop'
+            });
+        }
+        
+        marker = new google.maps.Marker({
+            position: currentLocation,
+            map: map,
+            title: 'Hello World!',
+            icon: icon,
+            size: new google.maps.Size(20, 32),
+        });
+        
+
+        function move(){
+            var currentLng = currentLocation.lng;
+            var currentLat = currentLocation.lat;
+            console.log(currentLat);
+            
+            var targetLng = destination.lng;
+            var targetLat = destination.lat;
+            console.log(targetLat)
+            
+            var newLng;
+            var newLat;
+            
+            //increments longitude
+            if (targetLng > currentLng) {
+                currentLng += 0.00001;
+                if (targetLng - currentLng < 0.0001){
+                    currentLng = targetLng;
+                }
+            }
+            else if (targetLng < currentLng){
+                currentLng -= 0.00001;
+                if (currentLng - targetLng < 0.0001){
+                    currentLng = targetLng;
+                }
+            }
+            
+            //increments latitude
+            if (targetLat > currentLat) {
+                currentLat += 0.00001;
+                if (targetLat - currentLat < 0.0001){
+                    currentLat = targetLat;
+                }
+            }
+            else if (targetLat < currentLat){
+                currentLat -= 0.00001;
+                if (currentLat - targetLat < 0.0001){
+                    currentLat = targetLat;
+                }
+            }
+            
+            //create new location obj
+            var latlng = new google.maps.LatLng(currentLat, currentLng)
+            map.setCenter(latlng)
+            
+            currentLocation = {lat: currentLat, lng: currentLng};
+            //console.log(currentLocation)
+            
+            marker.setPosition(latlng);
+            
+            setTimeout(function(){
+                move()
+                //console.log("moving")
+            }, 2);
+        }
+        
+        
+        move();
+        
+        
+      }
+      
+        var counter = coords.length - 1;
+        
+        function changeDestination() {
+            counter ++;
+            if (counter >= coords.length) {
+                counter = 0
+            }
+            console.log("changing destination to" + counter)
+            console.log(coords[counter])
+            destination = coords[counter]
+            
+            setTimeout(function(){
+                changeDestination();
+            }, 10000);
+        }
+        
+        changeDestination(0);
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD71DqOeoafSoHg8CTSJXpIxL-1pWh57yA&callback=initMap"
+    async defer></script>
+ 
+</body>
+
+</html>
